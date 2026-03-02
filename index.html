@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Квизы по плакатам Кукрыниксов</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #4a2c1a;
+      font-family: 'PT Serif', 'Times New Roman', serif;
+      color: #2e1e0e;
+      line-height: 1.5;
+      padding: 30px 20px;
+      background-image: 
+        linear-gradient(rgba(100, 60, 30, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100, 60, 30, 0.3) 1px, transparent 1px);
+      background-size: 40px 40px;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise" x="0%" y="0%" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.15 0"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.15"/></svg>');
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background-color: #f2e5d0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid #b68b6e;
+      padding: 2rem 2.5rem;
+      position: relative;
+      z-index: 1;
+      border-radius: 4px;
+    }
+
+    .container::before,
+    .container::after {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-color: #9e2b2b;
+      border-style: solid;
+      pointer-events: none;
+    }
+    .container::before {
+      top: 15px;
+      left: 15px;
+      border-top-width: 4px;
+      border-left-width: 4px;
+    }
+    .container::after {
+      bottom: 15px;
+      right: 15px;
+      border-bottom-width: 4px;
+      border-right-width: 4px;
+    }
+
+    .header {
+      margin-bottom: 2.5rem;
+      border-bottom: 3px solid #9e2b2b;
+      padding-bottom: 1.2rem;
+      position: relative;
+    }
+    .header h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #2e1e0e;
+      text-shadow: 2px 2px 0 #b68b6e;
+      letter-spacing: 2px;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .header h1::after {
+      content: "★ ★ ★";
+      display: block;
+      font-size: 1.2rem;
+      color: #9e2b2b;
+      letter-spacing: 8px;
+      margin-top: 0.25rem;
+    }
+
+    .sub {
+      font-size: 1.15rem;
+      color: #3d2b16;
+      background: rgba(255, 235, 200, 0.5);
+      padding: 0.8rem 1.2rem;
+      border-left: 6px solid #9e2b2b;
+      font-style: italic;
+    }
+
+    .quiz-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+    .quiz-btn {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 1.3rem;
+      padding: 1rem 2rem;
+      background: #fcf6e7;
+      border: 3px solid #9e5e3a;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 5px 5px 0 rgba(78, 42, 18, 0.3);
+      text-transform: uppercase;
+      flex: 1;
+      max-width: 300px;
+    }
+    .quiz-btn.active {
+      background: #9e2b2b;
+      border-color: #9e2b2b;
+      color: white;
+      box-shadow: 5px 5px 0 #4a2c1a;
+    }
+    .quiz-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 rgba(158, 43, 43, 0.5);
+    }
+
+    .card {
+      background: #fcf6e7;
+      border: 2px solid #b68b6e;
+      box-shadow: inset 0 1px 4px rgba(255,255,240,0.8), 0 4px 10px rgba(0,0,0,0.2);
+      padding: 1.8rem 2.2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: 10%;
+      width: 80%;
+      height: 4px;
+      background: #9e2b2b;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #4a2c1a;
+      min-width: 70px;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .input {
+      background: #fcf6e7;
+      border: 2px solid #9e5e3a;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      font-family: 'PT Serif', serif;
+      border-radius: 0;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      transition: 0.15s;
+      flex: 1 1 250px;
+    }
+    .input:focus {
+      outline: none;
+      border-color: #9e2b2b;
+      background: #fff9eb;
+    }
+
+    .btn {
+      background: transparent;
+      border: 3px solid #2e1e0e;
+      padding: 0.7rem 2rem;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      color: #2e1e0e;
+      cursor: pointer;
+      transition: 0.1s;
+      background-color: #fcf6e7;
+      box-shadow: 4px 4px 0 #2e1e0e;
+    }
+    .btn:hover:not(:disabled) {
+      background-color: #9e2b2b;
+      border-color: #9e2b2b;
+      color: white;
+      box-shadow: 4px 4px 0 #4a2c1a;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btnGhost {
+      background: #fcf6e7;
+      border-color: #9e5e3a;
+      color: #2e1e0e;
+      box-shadow: 3px 3px 0 #9e5e3a;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .progress {
+      margin-bottom: 2rem;
+    }
+    .progressText {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .progressBar {
+      height: 20px;
+      background: #cab89e;
+      border: 2px solid #9e5e3a;
+      position: relative;
+    }
+    .progressStars {
+      height: 100%;
+      width: 0%;
+      background: repeating-linear-gradient(45deg, #9e2b2b 0px, #9e2b2b 10px, #b64a4a 10px, #b64a4a 20px);
+      transition: width 0.3s;
+    }
+
+    .question-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      margin-bottom: 1.5rem;
+      border: 3px solid #9e5e3a;
+      background: #cab89e;
+      cursor: pointer;
+    }
+
+    .questionTitle {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      border-left: 6px solid #9e2b2b;
+      padding-left: 1rem;
+    }
+    .questionPrompt {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .answer-option {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 1.2rem;
+      background: #fff9eb;
+      border: 2px solid #9e5e3a;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+    .answer-option:hover {
+      border-color: #9e2b2b;
+      background: #f2e5d0;
+    }
+    .answer-option.selected {
+      border-color: #9e2b2b;
+      background: #f2dbb8;
+      box-shadow: inset 0 0 0 2px #9e2b2b;
+    }
+    .answer-option.correct {
+      border-color: #2a7a2a;
+      background: #d4edda;
+    }
+    .answer-option.incorrect {
+      border-color: #9e2b2b;
+      background: #f8d7da;
+    }
+    .answer-letter {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      min-width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #9e5e3a;
+      color: white;
+    }
+    .answer-text {
+      font-size: 1.1rem;
+    }
+
+    .feedback {
+      margin: 1.5rem 0;
+      padding: 1.2rem;
+      border-left: 6px solid #9e2b2b;
+      background: #fff9eb;
+    }
+    .feedbackStatus {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .feedbackExplain {
+      font-size: 1.1rem;
+    }
+    .feedback.correct-feedback .feedbackStatus {
+      color: #2a7a2a;
+    }
+    .feedback.incorrect-feedback .feedbackStatus {
+      color: #9e2b2b;
+    }
+
+    /* Звёзды в результате */
+    .stars-display {
+      margin: 1.5rem 0;
+      font-size: 2.5rem;
+      letter-spacing: 0.7rem;
+      text-align: center;
+    }
+    .star-filled {
+      color: #FFD700;
+      text-shadow: 0 0 10px #FFA500, 0 0 20px #FFD700;
+      animation: glow 1.5s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #FFD700; }
+      to { text-shadow: 0 0 20px #FFA500, 0 0 30px #FFD700; }
+    }
+    .star-empty {
+      color: #aaa;
+      text-shadow: 0 0 5px #666;
+    }
+
+    .encouragement-message {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      margin: 1rem 0 1.5rem;
+      color: #9e2b2b;
+      text-align: center;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .resultDetails {
+      margin-top: 1.5rem;
+    }
+    .result-item {
+      padding: 0.8rem;
+      border-bottom: 1px solid #b68b6e;
+    }
+    .result-item.correct {
+      background: rgba(42, 122, 42, 0.1);
+    }
+    .result-item.incorrect {
+      background: rgba(158, 43, 43, 0.1);
+    }
+
+    details {
+      margin-top: 1.5rem;
+    }
+    summary {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #9e2b2b;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px dashed #b68b6e;
+      color: #6b4f33;
+      font-size: 0.9rem;
+    }
+    .footer::before {
+      content: "✧ ✧ ✧";
+      letter-spacing: 6px;
+      color: #9e2b2b;
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Квизы по плакатам Кукрыниксов</h1>
+      <p class="sub">
+        Проверьте свои знания о легендарных плакатах военного времени. Два режима: 
+        «Угадай год» и «История плаката». Нажмите на картинку для увеличения.
+      </p>
+    </header>
+
+    <!-- Выбор квиза -->
+    <div class="quiz-selector">
+      <button id="quizYearBtn" class="quiz-btn active">🗓️ Угадай год</button>
+      <button id="quizHistoryBtn" class="quiz-btn">📜 История плаката</button>
+    </div>
+
+    <!-- Ввод имени -->
+    <section class="card" id="userInfoCard">
+      <div class="row">
+        <label class="label" for="studentName">Имя или команда:</label>
+        <input id="studentName" class="input" type="text" placeholder="Например: Дима">
+      </div>
+      <div class="row">
+        <label class="label" for="studentClass">Класс:</label>
+        <input id="studentClass" class="input" type="text" placeholder="Например: 9А">
+      </div>
+      <div class="row">
+        <button id="startBtn" class="btn btnPrimary">Начать квиз</button>
+        <button id="resetBtn" class="btn btnGhost" disabled>Сброс</button>
+      </div>
+    </section>
+
+    <!-- Блок квиза -->
+    <section id="quiz" class="card hidden" aria-live="polite">
+      <div class="progress">
+        <div class="progressText" id="progressText">Вопрос 1/10</div>
+        <div class="progressBar">
+          <div class="progressStars" id="progressStars" aria-label="Прогресс"></div>
+        </div>
+      </div>
+
+      <img id="questionImage" class="question-image" src="" alt="Плакат" style="cursor: pointer;">
+
+      <h2 id="questionTitle" class="questionTitle"></h2>
+      <p id="questionPrompt" class="questionPrompt"></p>
+      <div id="answers" class="answers"></div>
+
+      <div id="feedback" class="feedback hidden">
+        <div id="feedbackStatus" class="feedbackStatus"></div>
+        <div id="feedbackExplain" class="feedbackExplain"></div>
+      </div>
+
+      <div class="row">
+        <button id="nextBtn" class="btn btnPrimary" disabled>Дальше</button>
+      </div>
+    </section>
+
+    <!-- Результаты -->
+    <section id="result" class="card hidden">
+      <h2>Результат</h2>
+      <p id="resultText"></p>
+      <!-- Звёздный ряд -->
+      <div id="starsDisplay" class="stars-display"></div>
+      <!-- Подбадривающее сообщение -->
+      <div id="encouragementMessage" class="encouragement-message"></div>
+
+      <div class="row">
+        <button id="restartBtn" class="btn btnPrimary">Пройти заново</button>
+      </div>
+      <details class="details">
+        <summary>Показать ответы</summary>
+        <div id="resultDetails" class="resultDetails"></div>
+      </details>
+    </section>
+
+    <footer class="footer">
+      <p>Квизы по материалам выставки плакатов Кукрыниксов 1941–1945</p>
+    </footer>
+  </main>
+
+  <script>
+    // ==================== ДАННЫЕ ДЛЯ КВИЗОВ (с картинками) ====================
+    const IMAGE_PATH = './assets/posters_by_year/';
+
+    const quizYearData = [
+      {
+        title: "Плакат «Беспощадно разгромим и уничтожим врага!»",
+        prompt: "Это первый плакат Великой Отечественной войны. В каком году он появился на улицах Москвы?",
+        options: ["1941", "1942", "1943", "1944"],
+        correct: 0,
+        explanation: "Плакат создан 22 июня 1941 года и уже 24 июня появился на улицах Москвы.",
+        image: "1.jpg"
+      },
+      {
+        title: "Плакат «Долг платежом красен»",
+        prompt: "Этот плакат с партизанской тематикой и стихами Маршака был создан в:",
+        options: ["1941", "1942", "1943", "1944"],
+        correct: 0,
+        explanation: "Плакат создан в 1941 году, сопровождался стихами С. Маршака: «Днём фашист сказал крестьянам: шапку с головы долой!» Ночью отдал партизанам каску вместе с головой».",
+        image: "6.jpg"
+      },
+      {
+        title: "Плакат «Юный фриц»",
+        prompt: "Этот плакат из серии «Окна ТАСС» был создан в:",
+        options: ["1941", "1942", "1943", "1944"],
+        correct: 0,
+        explanation: "Плакат «Юный фриц» относится к 1941 году, высмеивает воспитание немецкой молодёжи в нацистском духе.",
+        image: "16.jpg"
+      },
+      {
+        title: "Плакат «Крыловская мартышка о Геббельсе»",
+        prompt: "В каком году Кукрыниксы создали этот сатирический плакат о министре пропаганды?",
+        options: ["1941", "1942", "1943", "1944"],
+        correct: 1,
+        explanation: "Плакат создан в 1942 году, высмеивает лживость геббельсовской пропаганды.",
+        image: "30.jpg"
+      },
+      {
+        title: "Плакат «Гитлериада»",
+        prompt: "Эта серия сатирических рисунков вышла в:",
+        options: ["1941", "1942", "1943", "1944"],
+        correct: 1,
+        explanation: "«Гитлериада» была создана в 1942 году и представляла собой серию карикатур на Гитлера и его окружение.",
+        image: "29.jpg"
+      },
+      {
+        title: "Плакат «Убей его!»",
+        prompt: "Знаменитый плакат с призывом к партизанам был создан в:",
+        options: ["1942", "1943", "1944", "1945"],
+        correct: 1,
+        explanation: "Плакат «Убей его!» (Окно ТАСС) относится к 1943 году, когда партизанское движение достигло пика.",
+        image: "33.jpg"
+      },
+      {
+        title: "Плакат «Расплата»",
+        prompt: "Плакат с символическим названием «Расплата» вышел в год коренного перелома. Какой это год?",
+        options: ["1942", "1943", "1944", "1945"],
+        correct: 1,
+        explanation: "«Расплата» создана в 1943 году, после побед под Сталинградом и Курском.",
+        image: "31.jpg"
+      },
+      {
+        title: "Плакат «Три года войны»",
+        prompt: "Этот плакат подводил итоги трёх лет войны. Когда он вышел?",
+        options: ["1943", "1944", "1945", "1942"],
+        correct: 1,
+        explanation: "Плакат создан в 1944 году, к трёхлетию начала войны.",
+        image: "47.jpg"
+      },
+      {
+        title: "Плакат про Минский котёл",
+        prompt: "Плакат «Пустой котёл в Берлине... и русский котёл под Минском» посвящён освобождению Минска. Какой это год?",
+        options: ["1943", "1944", "1945", "1942"],
+        correct: 1,
+        explanation: "Плакат создан в июле 1944 года, сразу после освобождения Минска в ходе операции «Багратион».",
+        image: "50.jpg"
+      },
+      {
+        title: "Плакат «Конец игры»",
+        prompt: "Этот плакат, символизирующий крах нацизма, был создан в:",
+        options: ["1944", "1945", "1943", "1942"],
+        correct: 1,
+        explanation: "Плакат «Конец игры» относится к 1945 году, предвещая скорую победу.",
+        image: "55.jpg"
+      }
+    ];
+
+    const quizHistoryData = [
+      {
+        title: "Плакат «Беспощадно разгромим и уничтожим врага!»",
+        prompt: "Какое событие стало поводом для создания этого первого военного плаката?",
+        options: [
+          "Начало бомбардировок Москвы",
+          "Нарушение Гитлером пакта о ненападении",
+          "Оккупация Киева",
+          "Битва под Москвой"
+        ],
+        correct: 1,
+        explanation: "Плакат был создан 22 июня 1941 года, в день нападения Германии, и изображал Гитлера, разрывающего пакт о ненападении.",
+        image: "1.jpg"
+      },
+      {
+        title: "Плакат «Долг платежом красен»",
+        prompt: "Кто автор стихотворного текста к этому плакату?",
+        options: [
+          "Владимир Маяковский",
+          "Самуил Маршак",
+          "Демьян Бедный",
+          "Александр Твардовский"
+        ],
+        correct: 1,
+        explanation: "Стихи к плакату написал Самуил Маршак, часто сотрудничавший с Кукрыниксами.",
+        image: "6.jpg"
+      },
+      {
+        title: "Нюрнбергский процесс",
+        prompt: "Какую известную карикатуру создали Кукрыниксы в связи с Нюрнбергским процессом?",
+        options: [
+          "«Последняя цифра»",
+          "«Верёвка для фюрера»",
+          "«Суд народов»",
+          "«Палачи в клетке»"
+        ],
+        correct: 0,
+        explanation: "Карикатура называлась «Последняя цифра» — на ней цифра 6 в дате 1946 изображала петлю для нацистских преступников.",
+        image: "58.jpg"
+      },
+      {
+        title: "Танк «Беспощадный»",
+        prompt: "На что Кукрыниксы передали свою Сталинскую премию 1942 года?",
+        options: [
+          "На строительство самолёта",
+          "На строительство танка",
+          "В фонд обороны",
+          "Детским домам"
+        ],
+        correct: 1,
+        explanation: "Художники передали все средства на строительство танка «Беспощадный», который дошёл до Берлина.",
+        image: "1.jpg"
+      },
+      {
+        title: "Минский котёл",
+        prompt: "Какому событию посвящён плакат о «русском котле» под Минском?",
+        options: [
+          "Обороне Минска в 1941",
+          "Освобождению Минска в 1944",
+          "Партизанскому рейду",
+          "Контрнаступлению 1943"
+        ],
+        correct: 1,
+        explanation: "Плакат создан в июле 1944 года, после освобождения Минска и окружения 105-тысячной немецкой группировки.",
+        image: "50.jpg"
+      },
+      {
+        title: "Техника создания",
+        prompt: "Как тиражировались «Окна ТАСС» в военное время?",
+        options: [
+          "Печатным станком",
+          "Вручную через трафареты",
+          "Литографией",
+          "Ксилографией"
+        ],
+        correct: 1,
+        explanation: "Плакаты «Окон ТАСС» тиражировались вручную с помощью трафаретов, что позволяло быстро реагировать на события.",
+        image: "27.jpg"
+      },
+      {
+        title: "Партизанская тема",
+        prompt: "Какой плакат Кукрыниксов целиком посвящён партизанской борьбе?",
+        options: [
+          "«Долг платежом красен»",
+          "«Убей его!»",
+          "«Партизанская месть»",
+          "«Народные мстители»"
+        ],
+        correct: 0,
+        explanation: "«Долг платежом красен» (1941) считается лучшим сатирическим плакатом партизанской тематики.",
+        image: "6.jpg"
+      },
+      {
+        title: "Эвакуация ТАСС",
+        prompt: "В какой город было эвакуировано Телеграфное агентство СССР (ТАСС) в 1941 году?",
+        options: [
+          "Саратов",
+          "Куйбышев (Самара)",
+          "Свердловск",
+          "Казань"
+        ],
+        correct: 1,
+        explanation: "ТАСС эвакуировали в Куйбышев, где было создано одно из крупнейших отделений «Окон ТАСС».",
+        image: "27.jpg"
+      },
+      {
+        title: "Совместная работа",
+        prompt: "Кто из известных поэтов регулярно работал с Кукрыниксами над текстами для плакатов?",
+        options: [
+          "Константин Симонов",
+          "Самуил Маршак",
+          "Александр Прокофьев",
+          "Николай Тихонов"
+        ],
+        correct: 1,
+        explanation: "Самуил Маршак был постоянным соавтором Кукрыниксов, его стихи появлялись на многих плакатах.",
+        image: "6.jpg"
+      },
+      {
+        title: "Гитлер и Наполеон",
+        prompt: "Какой исторический персонаж часто появлялся на плакатах Кукрыниксов для сравнения с Гитлером?",
+        options: [
+          "Цезарь",
+          "Наполеон",
+          "Александр Македонский",
+          "Карл XII"
+        ],
+        correct: 1,
+        explanation: "На плакатах часто проводилась параллель между Гитлером и Наполеоном, как в плакате «Наполеон потерпел поражение. То же будет и с зазнавшимся Гитлером» (1941).",
+        image: "3.jpg"
+      }
+    ];
+
+    // ==================== ЛОГИКА КВИЗА ====================
+    let currentQuiz = 'year';
+    let currentQuestions = quizYearData;
+    let currentIndex = 0;
+    let userAnswers = [];
+    let studentName = '';
+    let studentClass = '';
+
+    const quizYearBtn = document.getElementById('quizYearBtn');
+    const quizHistoryBtn = document.getElementById('quizHistoryBtn');
+    const userInfoCard = document.getElementById('userInfoCard');
+    const quizSection = document.getElementById('quiz');
+    const resultSection = document.getElementById('result');
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const studentNameInput = document.getElementById('studentName');
+    const studentClassInput = document.getElementById('studentClass');
+    const questionImage = document.getElementById('questionImage');
+    const questionTitle = document.getElementById('questionTitle');
+    const questionPrompt = document.getElementById('questionPrompt');
+    const answersDiv = document.getElementById('answers');
+    const feedbackDiv = document.getElementById('feedback');
+    const feedbackStatus = document.getElementById('feedbackStatus');
+    const feedbackExplain = document.getElementById('feedbackExplain');
+    const progressText = document.getElementById('progressText');
+    const progressStars = document.getElementById('progressStars');
+    const resultText = document.getElementById('resultText');
+    const starsDisplay = document.getElementById('starsDisplay');
+    const encouragementMessage = document.getElementById('encouragementMessage');
+    const resultDetails = document.getElementById('resultDetails');
+
+    quizYearBtn.addEventListener('click', () => {
+      currentQuiz = 'year';
+      currentQuestions = quizYearData;
+      quizYearBtn.classList.add('active');
+      quizHistoryBtn.classList.remove('active');
+      resetToStart();
+    });
+
+    quizHistoryBtn.addEventListener('click', () => {
+      currentQuiz = 'history';
+      currentQuestions = quizHistoryData;
+      quizHistoryBtn.classList.add('active');
+      quizYearBtn.classList.remove('active');
+      resetToStart();
+    });
+
+    function resetToStart() {
+      userInfoCard.classList.remove('hidden');
+      quizSection.classList.add('hidden');
+      resultSection.classList.add('hidden');
+      startBtn.disabled = false;
+      resetBtn.disabled = true;
+      currentIndex = 0;
+      userAnswers = [];
+    }
+
+    startBtn.addEventListener('click', () => {
+      studentName = studentNameInput.value.trim() || 'Аноним';
+      studentClass = studentClassInput.value.trim() || '';
+      userInfoCard.classList.add('hidden');
+      quizSection.classList.remove('hidden');
+      resultSection.classList.add('hidden');
+      currentIndex = 0;
+      userAnswers = [];
+      showQuestion();
+    });
+
+    resetBtn.addEventListener('click', resetToStart);
+
+    function showQuestion() {
+      const q = currentQuestions[currentIndex];
+      questionTitle.textContent = q.title;
+      questionPrompt.textContent = q.prompt;
+
+      if (q.image) {
+        questionImage.src = IMAGE_PATH + q.image;
+        questionImage.alt = q.title;
+        questionImage.classList.remove('hidden');
+        questionImage.onclick = () => window.open(questionImage.src, '_blank');
+      } else {
+        questionImage.classList.add('hidden');
+      }
+
+      progressText.textContent = `Вопрос ${currentIndex + 1}/${currentQuestions.length}`;
+      const progressPercent = ((currentIndex) / currentQuestions.length) * 100;
+      progressStars.style.width = progressPercent + '%';
+
+      answersDiv.innerHTML = '';
+      q.options.forEach((opt, idx) => {
+        const answerEl = document.createElement('div');
+        answerEl.className = 'answer-option';
+        answerEl.dataset.index = idx;
+        
+        const letterSpan = document.createElement('span');
+        letterSpan.className = 'answer-letter';
+        letterSpan.textContent = String.fromCharCode(65 + idx);
+        
+        const textSpan = document.createElement('span');
+        textSpan.className = 'answer-text';
+        textSpan.textContent = opt;
+        
+        answerEl.appendChild(letterSpan);
+        answerEl.appendChild(textSpan);
+        
+        if (userAnswers[currentIndex] && userAnswers[currentIndex].selected === idx) {
+          answerEl.classList.add('selected');
+        }
+        
+        answerEl.addEventListener('click', () => selectAnswer(idx));
+        answersDiv.appendChild(answerEl);
+      });
+
+      feedbackDiv.classList.add('hidden');
+      
+      if (userAnswers[currentIndex]) {
+        showFeedbackForCurrent();
+      }
+      
+      updateNextButton();
+    }
+
+    function selectAnswer(idx) {
+      if (userAnswers[currentIndex]) return;
+      
+      const q = currentQuestions[currentIndex];
+      const isCorrect = (idx === q.correct);
+      
+      userAnswers[currentIndex] = {
+        selected: idx,
+        correct: isCorrect,
+        question: q
+      };
+      
+      document.querySelectorAll('.answer-option').forEach((el, i) => {
+        if (i === idx) {
+          el.classList.add('selected');
+          if (isCorrect) {
+            el.classList.add('correct');
+          } else {
+            el.classList.add('incorrect');
+          }
+        }
+      });
+      
+      showFeedbackForCurrent();
+      updateNextButton();
+    }
+
+    function showFeedbackForCurrent() {
+      const answer = userAnswers[currentIndex];
+      if (!answer) return;
+      
+      const q = currentQuestions[currentIndex];
+      const isCorrect = answer.correct;
+      const selectedOption = q.options[answer.selected];
+      const correctOption = q.options[q.correct];
+      
+      feedbackStatus.textContent = isCorrect ? '✅ Верно!' : '❌ Неверно';
+      feedbackExplain.textContent = isCorrect 
+        ? q.explanation 
+        : `Вы выбрали: "${selectedOption}". Правильный ответ: "${correctOption}". ${q.explanation}`;
+      
+      feedbackDiv.classList.remove('hidden');
+      feedbackDiv.className = `feedback ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}`;
+    }
+
+    function updateNextButton() {
+      const answered = userAnswers[currentIndex] !== undefined;
+      nextBtn.disabled = !answered;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        showQuestion();
+      } else {
+        showResults();
+      }
+    });
+
+    function showResults() {
+      quizSection.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      
+      const totalCorrect = userAnswers.filter(a => a && a.correct).length;
+      const totalQuestions = currentQuestions.length;
+      const percent = Math.round((totalCorrect / totalQuestions) * 100);
+      
+      // Формируем звёздный ряд
+      let starsHTML = '';
+      for (let i = 0; i < totalQuestions; i++) {
+        const answer = userAnswers[i];
+        if (answer && answer.correct) {
+          starsHTML += '<span class="star-filled">★</span>';
+        } else {
+          starsHTML += '<span class="star-empty">☆</span>';
+        }
+      }
+      starsDisplay.innerHTML = starsHTML;
+
+      // Подбадривающая фраза
+      let encouragement = '';
+      if (percent === 100) {
+        encouragement = 'Великолепно! Вы настоящий знаток истории!';
+      } else if (percent >= 80) {
+        encouragement = 'Отлично! Но есть куда расти — изучите справки к вопросам!';
+      } else if (percent >= 60) {
+        encouragement = 'Хорошо! Попробуйте ещё раз, обращая внимание на детали.';
+      } else if (percent >= 40) {
+        encouragement = 'Неплохо! Каждый правильный ответ — шаг к пониманию истории.';
+      } else {
+        encouragement = 'Не сдавайтесь! Военные плакаты хранят много интересного. Пройдите квиз ещё раз!';
+      }
+      encouragementMessage.textContent = encouragement;
+
+      resultText.textContent = `${studentName}${studentClass ? ' (' + studentClass + ')' : ''}, ваш результат: ${totalCorrect} из ${totalQuestions} (${percent}%).`;
+      
+      resultDetails.innerHTML = '';
+      userAnswers.forEach((ans, idx) => {
+        if (!ans) return;
+        const q = currentQuestions[idx];
+        const item = document.createElement('div');
+        item.className = `result-item ${ans.correct ? 'correct' : 'incorrect'}`;
+        item.innerHTML = `
+          <strong>${idx + 1}. ${q.title}</strong><br>
+          Ваш ответ: ${q.options[ans.selected]}<br>
+          Правильно: ${q.options[q.correct]}<br>
+          <small>${q.explanation}</small>
+        `;
+        resultDetails.appendChild(item);
+      });
+    }
+
+    restartBtn.addEventListener('click', resetToStart);
+
+    resetToStart();
+  </script>
+</body>
+</html>
