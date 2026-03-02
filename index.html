@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Квизы по плакатам Кукрыниксов</title>
+  <title>Квизы по плакатам Кукрыниксов. Код Победы. Прочти военный плакат! </title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 
@@ -419,10 +419,11 @@
 <body>
   <main class="container">
     <header class="header">
-      <h1>Квизы по плакатам Кукрыниксов</h1>
+      <h1>Квизы по плакатам Кукрыниксов. Код Победы. Прочти военный плакат!</h1>
       <p class="sub">
-        Проверьте свои знания о легендарных плакатах военного времени. Два режима: 
-        «Угадай год» и «История плаката». Нажмите на картинку для увеличения.
+        Проверьте свои знания о легендарных плакатах военного времени.
+        Выбери свой путь: 
+        «Угадай год» и «История плаката»
       </p>
     </header>
 
@@ -443,7 +444,7 @@
         <input id="studentClass" class="input" type="text" placeholder="Например: 9А">
       </div>
       <div class="row">
-        <button id="startBtn" class="btn btnPrimary">Начать квиз</button>
+        <button id="startBtn" class="btn btnPrimary">Вперёд!</button>
         <button id="resetBtn" class="btn btnGhost" disabled>Сброс</button>
       </div>
     </section>
@@ -492,7 +493,7 @@
     </section>
 
     <footer class="footer">
-      <p>Квизы по материалам выставки плакатов Кукрыниксов 1941–1945</p>
+      <p>МБОУ ЦО 31  автор: Пастухова Анна</p>
     </footer>
   </main>
 
@@ -922,19 +923,19 @@
       // Подбадривающая фраза
       let encouragement = '';
       if (percent === 100) {
-        encouragement = 'Великолепно! Вы настоящий знаток истории!';
+        encouragement = 'Великолепно! Вот кто настоящий знаток истории плаката!';
       } else if (percent >= 80) {
         encouragement = 'Отлично! Но есть куда расти — изучите справки к вопросам!';
       } else if (percent >= 60) {
-        encouragement = 'Хорошо! Попробуйте ещё раз, обращая внимание на детали.';
+        encouragement = 'Хорошо! Но стоит попробовать ещё раз, обращая внимание на детали';
       } else if (percent >= 40) {
         encouragement = 'Неплохо! Каждый правильный ответ — шаг к пониманию истории.';
       } else {
-        encouragement = 'Не сдавайтесь! Военные плакаты хранят много интересного. Пройдите квиз ещё раз!';
+        encouragement = 'Нельзя сдаваться! Военные плакаты хранят много интересного. В следующий раз получится лучше!';
       }
       encouragementMessage.textContent = encouragement;
 
-      resultText.textContent = `${studentName}${studentClass ? ' (' + studentClass + ')' : ''}, ваш результат: ${totalCorrect} из ${totalQuestions} (${percent}%).`;
+      resultText.textContent = `${studentName}${studentClass ? ' (' + studentClass + ')' : ''}, результат: ${totalCorrect} из ${totalQuestions} (${percent}%).`;
       
       resultDetails.innerHTML = '';
       userAnswers.forEach((ans, idx) => {
